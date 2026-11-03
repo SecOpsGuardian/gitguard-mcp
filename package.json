@@ -12,7 +12,13 @@
   "bugs": {
     "url": "https://github.com/SecOpsGuardian/gitguard-mcp/issues"
   },
-  "keywords": ["mcp", "claude", "security", "gitguard", "sast"],
+  "keywords": [
+    "mcp",
+    "claude",
+    "security",
+    "gitguard",
+    "sast"
+  ],
   "bin": {
     "gitguard-mcp": "dist/index.js"
   },
@@ -35,7 +41,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
-    "zod": "3.25.76"
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
