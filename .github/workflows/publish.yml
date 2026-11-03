@@ -1,0 +1,60 @@
+name: Publicar no npm
+
+# Publica ao empurrar uma tag v*, por exemplo v0.1.0-beta.1.
+# Versão com "-" (beta, rc) sai com a tag de dist `beta`, não `latest`.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # Aprovação manual: crie o ambiente "npm-publish" em Settings > Environments
+    # e marque "Required reviewers".
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write # prova de origem (provenance)
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: A tag bate com a versão do package.json
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "Tag ($TAG) diferente de package.json ($PKG)." >&2
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npm audit --omit=dev --audit-level=high
+
+      - name: Confere o que vai dentro do pacote
+        run: |
+          npm pack --dry-run --json > pack.json
+          node -e '
+            const files = JSON.parse(require("fs").readFileSync("pack.json","utf8"))[0].files.map(f => f.path);
+            const bad = files.filter(f => !/^(dist\/|README\.md$|package\.json$)/.test(f) || /\.(spec|map)\.|\.env/.test(f));
+            console.log(files.join("\n"));
+            if (bad.length) { console.error("Arquivo fora do esperado:", bad); process.exit(1); }
+          '
+
+      - name: Publicar
+        run: |
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then TAG=beta; else TAG=latest; fi
+          npm publish --provenance --access public --tag "$TAG"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
