@@ -11,7 +11,7 @@ async function main() {
     // Nunca imprime o valor da chave, nem parte dele.
     console.error(
       'GITGUARD_TOKEN ausente ou inválida. Gere uma chave no GitGuard (menu MCP) e rode, por exemplo:\n' +
-        '  claude mcp add gitguard -e GITGUARD_TOKEN=gg_pat_... -- npx -y @gitguard/mcp',
+        '  claude mcp add gitguard -e GITGUARD_TOKEN=gg_pat_... -- npx -y @secopsguardian1/mcp',
     );
     process.exit(1);
   }

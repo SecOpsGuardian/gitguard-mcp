@@ -1,5 +1,5 @@
 {
-  "name": "@gitguard/mcp",
+  "name": "@secopsguardian1/mcp",
   "version": "0.1.0-beta.1",
   "description": "GitGuard dentro do Claude: consulte scans e vulnerabilidades, rode scans e faça triagem por conversa (MCP).",
   "license": "UNLICENSED",

@@ -1,4 +1,4 @@
-# @gitguard/mcp
+# @secopsguardian1/mcp
 
 O GitGuard dentro do Claude. Pergunte pelas vulnerabilidades do seu código, mande rodar um scan ou marcar um falso positivo, por conversa.
 
@@ -12,7 +12,7 @@ Disponível nos planos PRO e MAX.
 Claude Code:
 
 ```bash
-claude mcp add gitguard -e GITGUARD_TOKEN=gg_pat_... -- npx -y @gitguard/mcp
+claude mcp add gitguard -e GITGUARD_TOKEN=gg_pat_... -- npx -y @secopsguardian1/mcp
 ```
 
 Claude Desktop (arquivo de configuração):
@@ -22,7 +22,7 @@ Claude Desktop (arquivo de configuração):
   "mcpServers": {
     "gitguard": {
       "command": "npx",
-      "args": ["-y", "@gitguard/mcp"],
+      "args": ["-y", "@secopsguardian1/mcp"],
       "env": { "GITGUARD_TOKEN": "gg_pat_..." }
     }
   }
