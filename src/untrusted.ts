@@ -16,10 +16,18 @@
 const MAX_STRING = 1200;
 const MAX_TOTAL = 24_000;
 
-/** Controles C0/DEL, separadores de linha Unicode e marcas bidi (usadas p/ esconder texto). */
+/**
+ * Tudo que \u00E9 invis\u00EDvel ou de formata\u00E7\u00E3o, menos quebra de linha e tab: controles
+ * e formata\u00E7\u00E3o (Cc/Cf, que incluem bidi, zero-width, soft hyphen e o bloco
+ * Unicode Tags U+E0000-E007F, o "ASCII smuggling" que o editor n\u00E3o mostra e o
+ * modelo l\u00EA), uso privado, surrogates soltos, separadores de linha/par\u00E1grafo e
+ * seletores de varia\u00E7\u00E3o. Mesma regra do servidor (api/modules/mcp/mcp-presenter):
+ * aqui de novo porque GITGUARD_API_URL pode apontar para outro servidor.
+ * Montada por string com escapes ASCII: nenhum caractere invis\u00EDvel literal.
+ */
 const CONTROL_CHARS = new RegExp(
-  '[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u2028\u2029\u202A-\u202E\u2066-\u2069]',
-  'g',
+  '(?![\\n\\t])[\\p{Cc}\\p{Cf}\\p{Co}\\p{Cs}\\p{Zl}\\p{Zp}\\u{FE00}-\\u{FE0F}\\u{E0100}-\\u{E01EF}]',
+  'gu',
 );
 
 /** Remove controles (menos \n e \t) e corta strings longas. */

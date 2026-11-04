@@ -50,3 +50,10 @@ describe('GitGuardClient', () => {
     }
   });
 });
+
+describe('untrusted: invisíveis que o modelo lê', () => {
+  it('remove Unicode Tags, seletores de variação, zero-width e BOM, mantendo \n e \t', () => {
+    const hidden = [0xe0049, 0xe0067, 0xfe0f, 0x200b, 0xfeff, 0x00ad, 0x2060].map((c) => String.fromCodePoint(c)).join('');
+    expect(cleanString(`a${hidden}b\nc\td`)).toBe('ab\nc\td');
+  });
+});
